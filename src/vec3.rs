@@ -111,6 +111,16 @@ impl Add for Vec3 {
     }
 }
 
+// This allows bidirectional adds (e.g. 3.0 + my_vector), currently unsure of a better way to do
+// so, so only implemented for floats so far
+impl Add<Vec3> for f64 {
+    type Output = Vec3;
+
+    fn add(self, other: Vec3) -> Self::Output {
+        other + self
+    }
+}
+
 // Allows doing things like my_vec - 2.0 to work, along with my_vec - 2i32
 impl<T> Sub<T> for Vec3
 where
@@ -137,6 +147,17 @@ impl Sub for Vec3 {
         }
     }
 }
+
+// This allows bidirectional subs (e.g. 3.0 - my_vector), currently unsure of a better way to do
+// so, so only implemented for floats so far
+impl Sub<Vec3> for f64 {
+    type Output = Vec3;
+
+    fn sub(self, other: Vec3) -> Self::Output {
+        other - self
+    }
+}
+
 // Allows doing things like my_vec * 2.0 to work, along with my_vec * 2i32
 impl<T> Mul<T> for Vec3
 where
@@ -161,6 +182,19 @@ impl Mul for Vec3 {
             y: self.y * other.y,
             z: self.z * other.z,
         }
+    }
+}
+
+// This allows bidirectional multiplys (e.g. 3.0 * my_vector), currently unsure of a better way to do
+// so, so only implemented for floats so far
+// Note: I didn't implement division (e.g. 3 / my_vector) despite an inverse via multiplication
+// being possible because I've never seen a number divided by a vector and am unsure if any
+// specific maths depends on that being weirdly
+impl Mul<Vec3> for f64 {
+    type Output = Vec3;
+
+    fn mul(self, other: Vec3) -> Self::Output {
+        other * self
     }
 }
 
@@ -417,7 +451,7 @@ mod tests {
             v / 2,
             expected_positive
         );
-        
+
         assert_eq!(
             v / -2,
             expected_negative,
